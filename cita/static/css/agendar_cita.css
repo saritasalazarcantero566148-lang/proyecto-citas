@@ -1,0 +1,41 @@
+.cita-card {
+    max-width: 500px;
+}
+
+select {
+    width: 100%;
+}
+
+input[type="date"],
+input[type="time"] {
+    padding-left: 12px;
+}
+
+.btn {
+    margin-top: 15px;
+}
+
+.alert {
+    margin-bottom: 15px;
+}
+
+.modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal{
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    min-width: 350px;
+    text-align: center;
+}

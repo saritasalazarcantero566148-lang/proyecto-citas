@@ -1,0 +1,66 @@
+.login-card {
+    max-width: 420px;
+}
+
+.forgot-link {
+    text-align: right;
+    margin-top: 4px;
+}
+
+.forgot-link a {
+    font-size: 12px;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.forgot-link a:hover {
+    text-decoration: underline;
+}
+
+.intentos-warning {
+    font-size: 12px;
+    color: var(--warning);
+    margin-top: 4px;
+    display: none;
+}
+
+.intentos-warning.show {
+    display: block;
+}
+
+.modal-recuperar {
+    background: white;
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-recuperar h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.modal-recuperar p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.modal-recuperar .form-group {
+    text-align: left;
+    margin-bottom: 16px;
+}
+
+.btn-group-modal {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.btn-group-modal .btn {
+    flex: 1;
+}

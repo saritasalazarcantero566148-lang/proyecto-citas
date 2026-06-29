@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendar Cita</title>
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+    <link rel="stylesheet" href="{% static 'css/agendar_cita.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">
+            🩺
+        </div>
+
+        <h1>Agendar Cita Médica</h1>
+        <p>Seleccione la información de su cita</p>
+    </div>
+
+    <div class="card">
+
+        <div id="errorAlert" class="alert alert-error">
+            <span id="errorText"></span>
+        </div>
+
+        <div id="successAlert" class="alert alert-success">
+            <span id="successText"></span>
+        </div>
+
+        <form id="citaForm">
+
+            <div class="form-group">
+             <label>Especialidad</label>
+             <select id="especialidad">
+                <option value="">Seleccione una especialidad</option>
+                 {% for especialidad in especialidades %}
+                  <option value="{{ especialidad.id }}">
+                {{ especialidad.nombre }}
+                 </option>
+                 {% endfor %}
+               </select>
+            </div>
+
+            <div class="form-group">
+                <label>Medico</label>
+               <select id="medico">
+            <option value="">Seleccione un médico</option>
+            {% for medico in medicos %}
+             <option value="{{ medico.id }}">
+            {{ medico.nombre }}
+             </option>
+             {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Fecha</label>
+                <input type="date" id="fecha">
+                <div class="error-text" id="error-fecha"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Hora</label>
+                <input type="time" id="hora">
+                <div class="error-text" id="error-hora"></div>
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary"
+                id="btnAgendar">
+
+                <span id="btnAgendarText">
+                    Agendar Cita
+                </span>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="modal-overlay" id="modalCita" style="display:none;">
+
+    <div class="modal">
+
+        <h2>✅ Cita Agendada Correctamente</h2>
+
+        <p>
+            <strong>Médico:</strong>
+            <span id="modalMedico"></span>
+        </p>
+
+        <p>
+            <strong>Fecha:</strong>
+            <span id="modalFecha"></span>
+        </p>
+
+        <p>
+            <strong>Hora:</strong>
+            <span id="modalHora"></span>
+        </p>
+
+        <button
+            class="btn btn-primary"
+            onclick="cerrarModalCita()">
+            Entendido
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+    const PACIENTE_ID = 1;
+</script>
+
+<script src="{% static 'js/agendar_cita.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Entorno virtual
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+media/
+
+# Variables de entorno / credenciales
+.env
+.env.local
+
+# Migraciones 
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# VS Code 
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Distribución / empaquetado
+build/
+dist/
+*.egg-info/

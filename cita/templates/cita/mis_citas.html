@@ -1,0 +1,300 @@
+{% load static %}
+ 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Citas</title>
+    <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mis_citas.css' %}">
+</head>
+<body class="dashboard-body">
+ 
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+ 
+    <!-- ═══════════ NAVBAR ═══════════ -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="logo navbar-logo">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                    </path>
+                </svg>
+            </div>
+            <span class="navbar-title">MediCitas</span>
+        </div>
+        <div class="navbar-links">
+            <a href="{% url 'agendar_cita_view' %}" class="nav-link">Nueva Cita</a>
+            <a href="#" class="nav-link nav-active">Mis Citas</a>
+        </div>
+        <div class="navbar-user">
+            <span class="user-avatar" id="userAvatar">?</span>
+            <span class="user-name" id="userName">Cargando...</span>
+            <button class="btn btn-secondary btn-sm" id="btnLogout">Salir</button>
+        </div>
+    </nav>
+ 
+    <!-- ═══════════ MAIN ═══════════ -->
+    <main class="dashboard-main">
+ 
+        <!-- Encabezado de página -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Mis Citas</h1>
+                <p class="page-subtitle">Consulta y gestiona tus citas médicas programadas</p>
+            </div>
+            <a href="{% url 'agendar_cita_view' %}" class="btn btn-primary btn-nueva-cita">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Nueva Cita
+            </a>
+        </div>
+ 
+        <!-- Tarjetas resumen -->
+        <div class="stats-grid">
+            <div class="stat-card stat-pending" data-filtro="pendiente">
+                <div class="stat-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="countPendientes">—</div>
+                    <div class="stat-label">Pendientes</div>
+                </div>
+            </div>
+            <div class="stat-card stat-done" data-filtro="realizada">
+                <div class="stat-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="countRealizadas">—</div>
+                    <div class="stat-label">Realizadas</div>
+                </div>
+            </div>
+            <div class="stat-card stat-cancelled" data-filtro="cancelada">
+                <div class="stat-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="countCanceladas">—</div>
+                    <div class="stat-label">Canceladas</div>
+                </div>
+            </div>
+        </div>
+ 
+        <!-- Filtros -->
+        <div class="card filter-card">
+            <span class="filter-label">Filtrar por estado:</span>
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-estado="todas">Todas</button>
+                <button class="filter-tab" data-estado="pendiente">Pendientes</button>
+                <button class="filter-tab" data-estado="realizada">Realizadas</button>
+                <button class="filter-tab" data-estado="cancelada">Canceladas</button>
+            </div>
+        </div>
+ 
+        <!-- Tabla / estados -->
+        <div class="card table-card">
+ 
+            <!-- Cargando -->
+            <div class="loading-state" id="loadingState">
+                <div class="spinner spinner-blue"></div>
+                <p>Cargando tus citas...</p>
+            </div>
+ 
+            <!-- Vacío -->
+            <div class="empty-state hidden" id="emptyState">
+                <div class="empty-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3>No hay citas en esta categoría</h3>
+                <p>Agenda tu primera cita médica con nuestros especialistas.</p>
+                <a href="{% url 'agendar_cita_view' %}" class="btn btn-primary" style="width:auto; margin-top:8px;">
+                    Agendar cita
+                </a>
+            </div>
+ 
+            <!-- Tabla -->
+            <div class="table-wrapper hidden" id="tableWrapper">
+                <table class="citas-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Especialidad</th>
+                            <th>Médico</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citasBody">
+                        <!-- Generado por JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+ 
+    </main>
+ 
+    <!-- ═══════════ MODAL COMPROBANTE ═══════════ -->
+    <div class="modal-overlay" id="modalDetalle">
+        <div class="modal modal-comprobante">
+ 
+            <button class="modal-close-btn" id="btnCerrarModal" aria-label="Cerrar">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+ 
+            <!-- Cabecera comprobante -->
+            <div class="comprobante-header">
+                <div class="logo comprobante-logo">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                        </path>
+                    </svg>
+                </div>
+                <div class="comprobante-title-group">
+                    <h2>Comprobante de Cita</h2>
+                    <p class="comprobante-numero" id="comprobanteNumero">CIT-00001</p>
+                </div>
+                <span class="badge" id="comprobanteBadge">pendiente</span>
+            </div>
+ 
+            <!-- Detalles -->
+            <div class="comprobante-grid">
+                <div class="comprobante-item">
+                    <span class="comprobante-label">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Paciente
+                    </span>
+                    <span class="comprobante-value" id="detPaciente">—</span>
+                </div>
+                <div class="comprobante-item">
+                    <span class="comprobante-label">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        Especialidad
+                    </span>
+                    <span class="comprobante-value" id="detEspecialidad">—</span>
+                </div>
+                <div class="comprobante-item">
+                    <span class="comprobante-label">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Médico
+                    </span>
+                    <span class="comprobante-value" id="detMedico">—</span>
+                </div>
+                <div class="comprobante-item">
+                    <span class="comprobante-label">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        Fecha
+                    </span>
+                    <span class="comprobante-value" id="detFecha">—</span>
+                </div>
+                <div class="comprobante-item">
+                    <span class="comprobante-label">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Hora
+                    </span>
+                    <span class="comprobante-value" id="detHora">—</span>
+                </div>
+                <div class="comprobante-item">
+                    <span class="comprobante-label">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        </svg>
+                        Lugar
+                    </span>
+                    <span class="comprobante-value" id="detLugar">—</span>
+                </div>
+            </div>
+ 
+            <!-- Indicaciones -->
+            <div class="comprobante-notas" id="notasWrapper">
+                <span class="comprobante-label">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Indicaciones
+                </span>
+                <p class="notas-text" id="detNotas">—</p>
+            </div>
+ 
+            <!-- Acciones -->
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="btnCerrarModal2">Cerrar</button>
+                <button class="btn btn-danger hidden" id="btnCancelarDesdeModal">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancelar Cita
+                </button>
+                <button class="btn btn-primary" id="btnDescargarPDF">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Descargar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- ═══════════ MODAL CONFIRMAR CANCELACIÓN (HU5) ═══════════ -->
+    <div class="modal-overlay" id="modalConfirmarCancelacion">
+        <div class="modal modal-confirm">
+            <div class="modal-confirm-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="26" height="26">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z">
+                    </path>
+                </svg>
+            </div>
+            <h3 class="modal-confirm-title">¿Cancelar esta cita?</h3>
+            <p class="modal-confirm-text" id="textoCancelacion">
+                Esta acción liberará el horario para otros pacientes y no se puede deshacer.
+                Te enviaremos un correo confirmando la cancelación.
+            </p>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="btnNoCancelar">No, mantener</button>
+                <button class="btn btn-danger" id="btnSiCancelar">Sí, cancelar cita</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/mis_citas.js' %}"></script>
+</body>
+</html>

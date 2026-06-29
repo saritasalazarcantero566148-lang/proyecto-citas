@@ -1,0 +1,736 @@
+/* =============================================
+   mis_citas.css  —  HU4: Consultar Mis Citas
+   Depende de registro.css (variables y base)
+   ============================================= */
+
+/* ── Body en modo dashboard ── */
+.dashboard-body {
+    display: block;
+    background: var(--bg-body);
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* =============================================
+   NAVBAR
+   ============================================= */
+.navbar {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--shadow-sm);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.navbar-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    margin-bottom: 0;
+}
+
+.navbar-logo svg {
+    width: 18px;
+    height: 18px;
+}
+
+.navbar-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.navbar-links {
+    display: flex;
+    gap: 4px;
+    margin-left: 8px;
+    flex: 1;
+}
+
+.nav-link {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background: var(--bg-body);
+    color: var(--text-primary);
+}
+
+.nav-active {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--primary), #3b82f6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.user-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 13px;
+    width: auto;
+}
+
+/* =============================================
+   LAYOUT PRINCIPAL
+   ============================================= */
+.dashboard-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+}
+
+/* =============================================
+   ENCABEZADO DE PÁGINA
+   ============================================= */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    gap: 16px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.btn-nueva-cita {
+    white-space: nowrap;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    flex-shrink: 0;
+}
+
+/* =============================================
+   TARJETAS DE RESUMEN
+   ============================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-pending .stat-icon {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.stat-done .stat-icon {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.stat-cancelled .stat-icon {
+    background: var(--error-light);
+    color: var(--error);
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* =============================================
+   FILTROS
+   ============================================= */
+.filter-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.filter-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-tab.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* =============================================
+   TABLA DE CITAS
+   ============================================= */
+.table-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.citas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.citas-table thead {
+    background: var(--bg-body);
+    border-bottom: 1px solid var(--border);
+}
+
+.citas-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.citas-table td {
+    padding: 16px 20px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.citas-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.citas-table tbody tr {
+    transition: background 0.15s;
+}
+
+.citas-table tbody tr:hover {
+    background: var(--bg-body);
+}
+
+/* Fecha y hora en la tabla */
+.fecha-cell {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.hora-cell {
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.medico-cell {
+    white-space: nowrap;
+}
+
+/* ── Badges de estado ── */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.badge-pendiente {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.badge-realizada {
+    background: var(--success-light);
+    color: #059669;
+}
+
+.badge-cancelada {
+    background: var(--error-light);
+    color: #dc2626;
+}
+
+/* ── Botón de acción en tabla ── */
+.btn-ver {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-ver:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+/* =============================================
+   ESTADOS DE CARGA / VACÍO
+   ============================================= */
+.loading-state,
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 12px;
+    text-align: center;
+}
+
+.loading-state p,
+.empty-state p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.empty-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--bg-body);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.empty-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--text-muted);
+}
+
+.empty-state h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.spinner-blue {
+    border-color: var(--primary-light);
+    border-top-color: var(--primary);
+    width: 36px;
+    height: 36px;
+    border-width: 3px;
+}
+
+/* =============================================
+   MODAL COMPROBANTE
+   ============================================= */
+.modal-comprobante {
+    max-width: 520px;
+    width: 95%;
+    padding: 32px;
+    text-align: left;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--bg-body);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+    background: var(--error-light);
+    color: var(--error);
+    border-color: var(--error);
+}
+
+/* Cabecera del comprobante */
+.comprobante-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.comprobante-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+}
+
+.comprobante-logo svg {
+    width: 22px;
+    height: 22px;
+}
+
+.comprobante-title-group {
+    flex: 1;
+}
+
+.comprobante-title-group h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.comprobante-numero {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: monospace;
+}
+
+/* Grid de detalles */
+.comprobante-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.comprobante-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comprobante-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.comprobante-label svg {
+    flex-shrink: 0;
+}
+
+.comprobante-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Notas */
+.comprobante-notas {
+    background: var(--bg-body);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.notas-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* =============================================
+   UTILITARIOS
+   ============================================= */
+.hidden {
+    display: none !important;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 16px;
+    }
+
+    .navbar-links {
+        display: none;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .dashboard-main {
+        padding: 20px 16px 40px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-nueva-cita {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .citas-table th:nth-child(4),
+    .citas-table td:nth-child(4) {
+        display: none;
+    }
+
+    .comprobante-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =============================================
+   HU5 — CANCELAR CITA
+   ============================================= */
+
+.acciones-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1.5px solid var(--error);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--error);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+    background: var(--error-light);
+}
+
+.btn-cancelar:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: var(--border);
+    color: var(--text-muted);
+}
+
+/* Botón rojo "destructivo" reutilizable (modal de comprobante y confirmación) */
+.btn-danger {
+    background: var(--error);
+    color: #fff;
+    border: 1.5px solid var(--error);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.btn-danger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Modal de confirmación de cancelación */
+.modal-confirm {
+    max-width: 380px;
+    width: 90%;
+    padding: 32px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-confirm-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--error-light);
+    color: var(--error);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.modal-confirm-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.modal-confirm-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .acciones-cell {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

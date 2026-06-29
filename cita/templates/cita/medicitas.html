@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MediCitas | Sistema de Gestión de Citas Médicas</title>
+
+    <link rel="stylesheet" href="{% static 'css/medicitas.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+<nav class="navbar">
+    <div class="logo">
+        <i class="fa-solid fa-heart-pulse"></i>
+        <span>MediCitas</span>
+    </div>
+    <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#especialidades">Especialidades</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#funcionamiento">¿Cómo funciona?</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-buttons">
+        <a href="{% url 'login_view' %}" class="btn-login"> Iniciar sesión </a>
+        <a href="{% url 'registro_view' %}" class="btn-register">Registrarse</a>
+    </div>
+    <div class="menu-btn">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+</nav>
+
+</header>
+
+<section class="hero" id="inicio">
+    <div class="hero-content">
+        <h1>Agenda tus citas médicas de forma rápida, segura y sin complicaciones.</h1>
+        <p>MediCitas es una plataforma diseñada para facilitar la gestión de citas médicas entre pacientes y profesionales de la salud. Programa tus consultas desde cualquier lugar y accede a tu historial de citas en un solo lugar.</p>
+        <div class="hero-buttons">
+            <a href="{% url 'login_view' %}" class="btn-primary">Agendar una cita</a>
+            <a href="#especialidades" class="btn-secondary">Conocer especialidades</a>
+        </div>
+    </div>
+
+</section>
+
+<section class="especialidades" id="especialidades">
+    <div class="section-title">
+        <h2>Especialidades Médicas</h2>
+        <p>Encuentra atención médica en diferentes áreas de la salud con profesionales capacitados.</p>
+    </div>
+    <div class="cards">
+    <div class="card">
+        <div class="icon">
+        <i class="fa-solid fa-user-doctor"></i>
+        </div>
+    <h3>Medicina General</h3>
+    <p>Consultas para prevención, diagnóstico y tratamiento de enfermedades comunes.</p>
+    </div>
+    
+    <div class="card">
+        <div class="icon">
+            <i class="fa-solid fa-tooth"></i>
+        </div>
+        <h3>Odontología</h3>
+        <p>Atención odontológica preventiva y tratamientos para el cuidado de tu salud oral.</p>
+    </div>
+
+    <div class="card">
+        <div class="icon">
+            <i class="fa-solid fa-child"></i>
+        </div>
+        <h3>Pediatría</h3>
+        <p>Atención médica especializada para niños y adolescentes.</p>
+    </div>
+    
+    <div class="card">
+        <div class="icon">
+            <i class="fa-solid fa-heart-circle-plus"></i>
+        </div>
+        <h3>Cardiología</h3>
+        <p>Evaluación y seguimiento de enfermedades cardiovasculares.</p>
+    </div>
+    
+    <div class="card">
+        <div class="icon">
+            <i class="fa-solid fa-person-pregnant"></i>
+        </div>
+        <h3>Ginecología</h3>
+        <p>Servicios orientados al cuidado integral de la salud femenina.</p>
+    </div>
+    
+    <div class="card">
+        <div class="icon">
+            <i class="fa-solid fa-brain"></i>
+        </div>
+        <h3>Psicología</h3>
+        <p>Acompañamiento profesional para fortalecer tu bienestar emocional y mental.</p>
+    </div>
+</div>
+</section>
+
+
+<section class="nosotros" id="nosotros">
+    <div class="nosotros-contenido">
+        <h2>¿Quiénes somos?</h2>
+        <p>MediCitas es una plataforma desarrollada para facilitar la gestión de citas médicas entre pacientes y profesionales de la salud. Nuestro objetivo es brindar una experiencia rápida, segura y organizada, permitiendo programar, consultar y administrar citas médicas desde cualquier dispositivo.</p>
+    </div>
+</section>
+
+
+<footer id="contacto">
+    <div class="footer-container">
+        <div class="footer-info">
+            <h3>MediCitas</h3>
+            <p>Plataforma para la gestión de citas médicas que facilita el acceso a los servicios de salud de forma rápida, segura y eficiente.</p>
+        </div>
+
+        <div class="footer-links">
+            <h4>Enlaces</h4>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#especialidades">Especialidades</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#funcionamiento">¿Cómo funciona?</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <h4>Contacto</h4>
+            <p><i class="fa-solid fa-location-dot"></i> Calle 123 #45-67, Medellín</p>
+            <p><i class="fa-solid fa-phone"></i> +57 300 123 4567</p>
+            <p><i class="fa-solid fa-envelope"></i> contacto@medicitas.com</p>
+        </div>
+
+        <div class="footer-hours">
+            <h4>Horario</h4>
+            <p>Lunes a Viernes</p>
+            <p>7:00 a.m. - 6:00 p.m.</p>
+            <p>Sábados</p>
+            <p>8:00 a.m. - 12:00 m.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div class="footer-copy">
+        <p>© 2026 MediCitas. Todos los derechos reservados.</p>
+    </div>
+</footer>
