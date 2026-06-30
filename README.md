@@ -134,7 +134,7 @@ venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 
 # 4. Crear la base de datos en MySQL Workbench
-# (crear una base de datos vacía, proyecto_citas
+# crear una base de datos vacía, proyecto_citas
 
 # 5. Aplicar migraciones
 python manage.py makemigrations

@@ -1,0 +1,119 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios</title>
+
+    <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gestion_horarios.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gestion_usuarios.css' %}">
+</head>
+
+<body class="gh-body">
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal Editar Usuario -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h2>Editar Usuario</h2>
+            <form id="editForm" novalidate>
+                <input type="hidden" id="editId">
+
+                <div class="form-group full-width">
+                    <label>Nombre Completo <span class="required">*</span></label>
+                    <input type="text" id="editNombre" style="padding-left:12px;">
+                    <div class="error-text" id="error-editNombre"></div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Documento <span class="required">*</span></label>
+                        <input type="text" id="editDocumento" style="padding-left:12px;">
+                        <div class="error-text" id="error-editDocumento"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" id="editTelefono" style="padding-left:12px;">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>EPS</label>
+                        <input type="text" id="editEps" style="padding-left:12px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <select id="editSexo" style="padding-left:12px;">
+                            <option value="">Seleccionar...</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="O">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Alergias o Condiciones Médicas</label>
+                    <textarea id="editAlergias"></textarea>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardarEdit">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container gh-container">
+        <div class="header">
+            <div class="logo">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            <h1>Gestión de Usuarios</h1>
+            <p>Administra las cuentas de pacientes registrados</p>
+        </div>
+
+        <div class="card">
+            <div class="form-group full-width" style="margin-bottom:0;">
+                <label>Buscar</label>
+                <input type="text" id="buscador" placeholder="Buscar por nombre, correo o documento..." style="padding-left:12px;">
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <div class="section-title">📋 Usuarios Registrados</div>
+
+            <div class="gh-table-wrapper">
+                <table class="gh-table" id="tablaUsuarios">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Documento</th>
+                            <th>Registrado</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuariosBody"></tbody>
+                </table>
+                <p class="gh-empty" id="emptyMessage" style="display:none;">No se encontraron usuarios.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="{% url 'inicio' %}">← Volver al inicio</a>
+        </div>
+    </div>
+
+    <script src="{% static 'js/gestion_usuarios.js' %}"></script>
+</body>
+</html>

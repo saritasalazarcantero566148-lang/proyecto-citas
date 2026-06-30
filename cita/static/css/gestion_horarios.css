@@ -1,0 +1,101 @@
+.gh-body {
+    align-items: flex-start;
+    padding: 40px 20px;
+}
+
+.gh-container {
+    max-width: 760px;
+}
+
+.gh-table-wrapper {
+    overflow-x: auto;
+}
+
+.gh-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.gh-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: var(--bg-body);
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+}
+
+.gh-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+}
+
+.gh-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.gh-badge.activo {
+    background: var(--success-light);
+    color: #065f46;
+}
+
+.gh-badge.inactivo {
+    background: var(--error-light);
+    color: #991b1b;
+}
+
+.gh-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.gh-actions button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.gh-actions .gh-btn-toggle {
+    color: var(--text-secondary);
+    background: var(--bg-body);
+}
+
+.gh-actions .gh-btn-toggle:hover {
+    background: var(--border);
+}
+
+.gh-actions .gh-btn-edit {
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.gh-actions .gh-btn-edit:hover {
+    background: #c7dafd;
+}
+
+.gh-actions .gh-btn-delete {
+    color: var(--error);
+    background: var(--error-light);
+}
+
+.gh-actions .gh-btn-delete:hover {
+    background: #fbd5d5;
+}
+
+.gh-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 20px 0;
+}

@@ -1,0 +1,140 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Horarios</title>
+
+    <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gestion_horarios.css' %}">
+</head>
+
+<body class="gh-body">
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal Editar Horario -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h2>Editar Horario</h2>
+            <form id="editForm" novalidate>
+                <input type="hidden" id="editId">
+
+                <div class="form-group full-width">
+                    <label>Fecha <span class="required">*</span></label>
+                    <input type="date" id="editFecha" style="padding-left:12px;">
+                    <div class="error-text" id="error-editFecha"></div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Hora Inicio <span class="required">*</span></label>
+                        <input type="time" id="editHoraInicio" style="padding-left:12px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Fin <span class="required">*</span></label>
+                        <input type="time" id="editHoraFin" style="padding-left:12px;">
+                    </div>
+                </div>
+                <div class="error-text" id="error-editHoras"></div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardarEdit">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container gh-container">
+        <div class="header">
+            <div class="logo">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h1>Gestión de Horarios Médicos</h1>
+            <p>Administra la disponibilidad de cada médico</p>
+        </div>
+
+        <div class="card">
+            <div class="section-title">🩺 Seleccionar Médico</div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Especialidad <span class="required">*</span></label>
+                    <select id="especialidad" style="padding-left:12px;">
+                        <option value="">Seleccione una especialidad</option>
+                        {% for esp in especialidades %}
+                            <option value="{{ esp.id }}">{{ esp.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Médico <span class="required">*</span></label>
+                    <select id="medico" style="padding-left:12px;" disabled>
+                        <option value="">Seleccione un médico</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="horariosCard" style="display:none; margin-top:20px;">
+            <div class="section-title">➕ Agregar Horario</div>
+
+            <form id="formHorario" novalidate>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Fecha <span class="required">*</span></label>
+                        <input type="date" id="fecha" style="padding-left:12px;">
+                        <div class="error-text" id="error-fecha"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Inicio <span class="required">*</span></label>
+                        <input type="time" id="hora_inicio" style="padding-left:12px;">
+                        <div class="error-text" id="error-hora_inicio"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Fin <span class="required">*</span></label>
+                        <input type="time" id="hora_fin" style="padding-left:12px;">
+                        <div class="error-text" id="error-hora_fin"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btnAgregar" style="margin-top:8px;">
+                    <span id="btnAgregarText">Agregar Horario</span>
+                </button>
+            </form>
+
+            <div class="section-title" style="margin-top:28px;">📋 Horarios Configurados</div>
+
+            <div class="gh-table-wrapper">
+                <table class="gh-table" id="tablaHorarios">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="horariosBody">
+                        <!-- Filas generadas por JS -->
+                    </tbody>
+                </table>
+                <p class="gh-empty" id="emptyMessage" style="display:none;">Este médico no tiene horarios configurados.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="{% url 'inicio' %}">← Volver al inicio</a>
+        </div>
+    </div>
+
+    <script src="{% static 'js/gestion_horarios.js' %}"></script>
+</body>
+</html>

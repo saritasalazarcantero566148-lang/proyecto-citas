@@ -1,7 +1,7 @@
 import re
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Usuario
+from .models import Usuario, Cita, HorarioMedico
 
 
 class RegistroSerializer(serializers.ModelSerializer):
@@ -78,13 +78,11 @@ class LoginSerializer(serializers.Serializer):
                 'correo': 'No existe una cuenta con este correo.'
             })
 
-        # Verificar bloqueo
         if usuario.esta_bloqueado():
             raise serializers.ValidationError({
                 'bloqueado': 'Cuenta bloqueada por 15 minutos por múltiples intentos fallidos.'
             })
 
-        # Verificar contraseña
         if not usuario.check_password(contrasena):
             usuario.registrar_intento_fallido()
             intentos_restantes = 3 - usuario.intentos_fallidos
@@ -96,7 +94,6 @@ class LoginSerializer(serializers.Serializer):
                 'contrasena': f'Contraseña incorrecta. Te quedan {intentos_restantes} intento(s).'
             })
 
-        # Login exitoso
         usuario.resetear_intentos()
 
         refresh = RefreshToken.for_user(usuario)
@@ -108,15 +105,13 @@ class LoginSerializer(serializers.Serializer):
         data['usuario'] = usuario
         return data
 
-    from rest_framework import serializers
-from .models import Cita
- 
+
 class CitaSerializer(serializers.ModelSerializer):
     medico_nombre       = serializers.SerializerMethodField()
     especialidad_nombre = serializers.SerializerMethodField()
     paciente_nombre     = serializers.SerializerMethodField()
     numero_comprobante  = serializers.SerializerMethodField()
- 
+
     class Meta:
         model  = Cita
         fields = [
@@ -127,25 +122,109 @@ class CitaSerializer(serializers.ModelSerializer):
             'especialidad_nombre',
             'paciente_nombre',
             'numero_comprobante',
-            'estado',       # 'pendiente' | 'realizada' | 'cancelada'
-            'notas',
-            'direccion',
+            'estado',
         ]
- 
+
     def get_medico_nombre(self, obj):
         if obj.medico:
-            return f"{obj.medico.nombre} {obj.medico.apellido}"
+            return obj.medico.nombre
         return ""
- 
+
     def get_especialidad_nombre(self, obj):
         if obj.medico and obj.medico.especialidad:
             return obj.medico.especialidad.nombre
         return ""
- 
+
     def get_paciente_nombre(self, obj):
         if obj.paciente:
-            return obj.paciente.get_full_name() or obj.paciente.correo
+            return obj.paciente.nombre_completo or obj.paciente.correo
         return ""
- 
+
     def get_numero_comprobante(self, obj):
-        return f"CIT-{obj.id:05d}"    
+        return f"CIT-{obj.id:05d}"
+
+
+class HorarioMedicoSerializer(serializers.ModelSerializer):
+    """
+    HU6 - Serializer de horarios médicos.
+    Valida que hora_fin > hora_inicio y que no se solape con otro
+    horario activo del mismo médico en la misma fecha.
+    """
+
+    medico_nombre = serializers.CharField(source='medico.nombre', read_only=True)
+
+    class Meta:
+        model = HorarioMedico
+        fields = [
+            'id',
+            'medico',
+            'medico_nombre',
+            'fecha',
+            'hora_inicio',
+            'hora_fin',
+            'activo',
+            'fecha_creacion',
+        ]
+        read_only_fields = ['fecha_creacion']
+
+    def validate(self, data):
+        hora_inicio = data.get('hora_inicio', getattr(self.instance, 'hora_inicio', None))
+        hora_fin    = data.get('hora_fin', getattr(self.instance, 'hora_fin', None))
+        medico      = data.get('medico', getattr(self.instance, 'medico', None))
+        fecha       = data.get('fecha', getattr(self.instance, 'fecha', None))
+
+        if hora_inicio and hora_fin and hora_fin <= hora_inicio:
+            raise serializers.ValidationError({
+                'hora_fin': 'La hora fin debe ser posterior a la hora inicio.'
+            })
+
+        if medico and fecha and hora_inicio and hora_fin:
+            existentes = HorarioMedico.objects.filter(
+                medico=medico,
+                fecha=fecha,
+                activo=True
+            )
+
+            if self.instance:
+                existentes = existentes.exclude(pk=self.instance.pk)
+
+            for h in existentes:
+                if hora_inicio < h.hora_fin and hora_fin > h.hora_inicio:
+                    raise serializers.ValidationError({
+                        'hora_inicio': f'Este horario se solapa con uno existente ({h.hora_inicio.strftime("%H:%M")} - {h.hora_fin.strftime("%H:%M")}).'
+                    })
+
+        return data
+    
+
+class UsuarioAdminSerializer(serializers.ModelSerializer):
+    """
+    HU7 - Serializer para administración de usuarios (pacientes).
+    No expone ni permite modificar la contraseña desde aquí.
+    """
+
+    class Meta:
+        model = Usuario
+        fields = [
+            'id',
+            'correo',
+            'nombre_completo',
+            'documento',
+            'telefono',
+            'fecha_nacimiento',
+            'sexo',
+            'eps',
+            'alergias',
+            'fecha_registro',
+            'is_active',
+        ]
+        read_only_fields = ['correo', 'fecha_registro']
+
+    def validate_documento(self, value):
+        if not value.isdigit() or len(value) < 5:
+            raise serializers.ValidationError('Solo números, mínimo 5 dígitos.')
+
+        existe = Usuario.objects.filter(documento=value).exclude(pk=self.instance.pk if self.instance else None).exists()
+        if existe:
+            raise serializers.ValidationError('Este documento ya está registrado por otro usuario.')
+        return value

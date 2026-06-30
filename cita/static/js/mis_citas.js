@@ -11,7 +11,7 @@
 // El endpoint de CANCELAR (HU5) ya está conectado al backend real.
 // ──────────────────────────────────────────────────────────────
 
-const API_CITAS         = '/auth/mis-citas/';
+const API_CITAS         = '/auth/mis_citas/';
 const API_CITA_DETALLE  = (id) => `/auth/mis-citas/${id}/`;
 const API_CANCELAR_CITA = (id) => `/auth/mis-citas/${id}/cancelar/`;
 
@@ -83,91 +83,28 @@ function getAuthHeaders() {
 async function cargarCitas(estado = null) {
     mostrarEstado('loading');
 
-    // ── Datos simulados ────────────────────────────────────────
-    // TODO: Reemplazar este bloque por:
-    //
-    //   const url = estado ? `${API_CITAS}?estado=${estado}` : API_CITAS;
-    //   const resp = await fetch(url, { headers: getAuthHeaders() });
-    //   if (!resp.ok) throw new Error('Error al cargar citas');
-    //   const data = await resp.json();
-    //   todasLasCitas = data;
-    //
-    // ──────────────────────────────────────────────────────────
-    await simularDelay(600);
+    try {
+        const url = estado ? `${API_CITAS}?estado=${estado}` : API_CITAS;
+        const resp = await fetch(url, { headers: getAuthHeaders() });
 
-    // Fechas dinámicas para las citas "pendiente" simuladas, así siempre se
-    // puede demostrar el caso cancelable (>24h) y el no-cancelable (<24h)
-    // sin importar el día en que se pruebe.
-    const enPocasHoras = new Date(Date.now() + 5 * 60 * 60 * 1000);   // dentro de 24h
-    const enUnaSemana  = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // fuera de 24h
-    const aFechaISO = (d) => d.toISOString().split('T')[0];
-    const aHoraISO  = (d) => d.toTimeString().slice(0, 5);
+        if (resp.status === 401) {
+            window.location.href = '/login/';
+            return;
+        }
 
-    todasLasCitas = [
-        {
-            id: 1,
-            fecha: aFechaISO(enPocasHoras),
-            hora: aHoraISO(enPocasHoras),
-            medico_nombre: 'Dr. Carlos Ramírez',
-            especialidad_nombre: 'Cardiología',
-            estado: 'pendiente',
-            notas: 'Traer resultados de exámenes anteriores',
-            direccion: 'Clínica Central, Piso 3, Consultorio 305',
-            paciente_nombre: localStorage.getItem('nombre_usuario') || 'Paciente',
-            numero_comprobante: 'CIT-00001',
-        },
-        {
-            id: 2,
-            fecha: aFechaISO(enUnaSemana),
-            hora: aHoraISO(enUnaSemana),
-            medico_nombre: 'Dra. María González',
-            especialidad_nombre: 'Dermatología',
-            estado: 'pendiente',
-            notas: '',
-            direccion: 'Clínica Norte, Piso 1, Consultorio 102',
-            paciente_nombre: localStorage.getItem('nombre_usuario') || 'Paciente',
-            numero_comprobante: 'CIT-00002',
-        },
-        {
-            id: 3,
-            fecha: '2025-06-20',
-            hora: '10:00',
-            medico_nombre: 'Dr. Luis Herrera',
-            especialidad_nombre: 'Medicina General',
-            estado: 'realizada',
-            notas: 'Control anual completado',
-            direccion: 'Clínica Central, Piso 2, Consultorio 210',
-            paciente_nombre: localStorage.getItem('nombre_usuario') || 'Paciente',
-            numero_comprobante: 'CIT-00003',
-        },
-        {
-            id: 4,
-            fecha: '2025-06-05',
-            hora: '08:00',
-            medico_nombre: 'Dra. Ana Morales',
-            especialidad_nombre: 'Oftalmología',
-            estado: 'cancelada',
-            notas: 'Paciente canceló por viaje',
-            direccion: 'Clínica Sur, Piso 4, Consultorio 401',
-            paciente_nombre: localStorage.getItem('nombre_usuario') || 'Paciente',
-            numero_comprobante: 'CIT-00004',
-        },
-        {
-            id: 5,
-            fecha: '2025-05-28',
-            hora: '14:00',
-            medico_nombre: 'Dr. Jorge Vargas',
-            especialidad_nombre: 'Traumatología',
-            estado: 'realizada',
-            notas: '',
-            direccion: 'Clínica Este, Piso 2, Consultorio 205',
-            paciente_nombre: localStorage.getItem('nombre_usuario') || 'Paciente',
-            numero_comprobante: 'CIT-00005',
-        },
-    ];
+        if (!resp.ok) throw new Error('Error al cargar citas');
 
-    actualizarContadores();
-    renderizarTabla(filtroActual);
+        const data = await resp.json();
+        todasLasCitas = data;
+
+        actualizarContadores();
+        renderizarTabla(filtroActual);
+
+    } catch (error) {
+        console.error(error);
+        mostrarToast('No se pudieron cargar tus citas.', 'error');
+        mostrarEstado('empty');
+    }
 }
 
 // =============================================

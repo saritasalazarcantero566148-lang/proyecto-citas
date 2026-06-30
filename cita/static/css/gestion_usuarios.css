@@ -1,0 +1,9 @@
+.gh-badge.activo-usuario {
+    background: var(--success-light);
+    color: #065f46;
+}
+
+.gh-badge.inactivo-usuario {
+    background: var(--error-light);
+    color: #991b1b;
+}
